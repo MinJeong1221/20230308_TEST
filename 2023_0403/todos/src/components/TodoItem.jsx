@@ -7,7 +7,9 @@ const TodoItem = ({ todos, onDel, onToggle }) => {
       <li className={done ? "on" : ""}>
         <span onClick={() => onToggle(id)}></span>
         <em onClick={() => onToggle(id)}>{text}</em>
-        <button onClick={() => onDel(id)}>삭제</button>
+        <button className="btn-D" onClick={() => onDel(id)}>
+          삭제
+        </button>
       </li>
     </div>
   );

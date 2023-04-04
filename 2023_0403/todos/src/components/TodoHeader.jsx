@@ -1,26 +1,15 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
-
-function TodoHeader({ undoneCount }) {
+export default function TodoHeader({ todos }) {
   const dateStr = new Date().toLocaleDateString("ko-KR", {
     dateStyle: "full",
   });
 
-  useEffect(() => {
-    console.log("Todo Header 렌더링!");
-  });
-
+  const undoneCount = todos.filter((todo) => !todo.done).length;
   return (
-    <Conatiner>
+    <div>
       <h2>{dateStr}</h2>
-      <p>해야할 일 : {undoneCount}</p>
-    </Conatiner>
+      <p>
+        해야할 일 : {undoneCount}/{todos.length}
+      </p>
+    </div>
   );
 }
-
-const Conatiner = styled.div`
-  padding: 10px;
-  border-bottom: 1px solid black;
-`;
-
-export default React.memo(TodoHeader);

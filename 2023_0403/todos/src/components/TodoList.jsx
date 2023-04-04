@@ -1,52 +1,40 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import { useTodoDispatch, useTodoState } from "../state/todos";
-import Button from "./Button";
-import "./TodoList.css";
+export default function TodoList({ todos, removeTodo, toggleTodo }) {
+  console.log(todos);
 
-function TodoList() {
-  const todos = useTodoState();
-
-  useEffect(() => {
-    console.log("렌더링!");
-  });
-
-  const itemList = todos.map((todo) => <TodoItem key={todo.id} todo={todo} />);
+  const itemList = todos.map((todo) => (
+    <TodoItem
+      key={todo.id}
+      todo={todo}
+      toggleTodo={toggleTodo}
+      removeTodo={removeTodo}
+    />
+  ));
 
   return (
     <div>
-      <ul>{itemList}</ul>{" "}
+      <ul>{itemList}</ul>
     </div>
   );
 }
 
-function TodoItem({ todo: { text, done, id } }) {
-  const dispatch = useTodoDispatch();
-
+function TodoItem({ todo: { text, done, id }, toggleTodo, removeTodo }) {
   return (
-    <ItemBox
-      className="Itme-box"
-      done={done}
-      onClick={() => dispatch({ type: "TOGGLE_TODO", id })}
+    <li
+      className="Item-box"
+      style={{
+        textDecoration: done && "line-through",
+      }}
+      onClick={() => toggleTodo(id)}
     >
-      <span className="sp">{text}</span>
-      <Button
-        className="btn-D"
+      {text}
+      <button
         onClick={(e) => {
           e.stopPropagation();
-          dispatch({ type: "REMOVE_TODO", id });
+          removeTodo(id);
         }}
       >
         삭제
-      </Button>
-    </ItemBox>
+      </button>
+    </li>
   );
 }
-
-const ItemBox = styled.li`
-  span {
-    text-decoration: ${(props) => (props.done ? "line-through" : "none")};
-  }
-`;
-
-export default React.memo(TodoList);

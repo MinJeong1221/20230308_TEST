@@ -1,43 +1,37 @@
-import TodoProvider from "./state/todos";
-import Todos from "./components/Todos";
+import { useState } from "react";
+import "./App.css";
+import TodoHeader from "./components/TodoHeader";
+import TodoInput from "./components/TodoInput";
+import TodoList from "./components/TodoList";
 
-import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
-
-const GlobalStyle = createGlobalStyle`
-  * {
-    margin : 0;
-    padding : 0;
-    box-sizing: border-box;
-  }
-
-  li {
-    list-style: none;
-  }
-`;
+let nextId = 4;
 
 export default function App() {
+  const [todos, setTodos] = useState([]);
+
+  const createTodo = (text) => {
+    setTodos(todos.concat({ id: nextId++, text: text, done: false }));
+  };
+
+  const toggleTodo = (id) => {
+    const newTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, done: !todo.done } : todo
+    );
+    setTodos(newTodos);
+  };
+
+  const removeTodo = (id) => {
+    const newTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(newTodos);
+  };
+
   return (
-    <TodoProvider>
-      <GlobalStyle />
-      <ThemeProvider
-        theme={{
-          colors: {
-            main: "#66a6ff",
-          },
-        }}
-      >
-        <Container>
-          <Todos />
-        </Container>
-      </ThemeProvider>
-    </TodoProvider>
+    <div className="main-v">
+      <TodoHeader className="header" todos={todos} />
+
+      <TodoList todos={todos} removeTodo={removeTodo} toggleTodo={toggleTodo} />
+
+      <TodoInput className="input" createTodo={createTodo} />
+    </div>
   );
 }
-
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  height: 100vh;
-`;
